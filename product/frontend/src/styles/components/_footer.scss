@@ -1,0 +1,34 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.footer {
+  border-top: 1px solid $color-border;
+  padding: $space-8 0 $space-6;
+  margin-top: $space-12;
+
+  &__inner {
+    @include rail-layout;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: $space-6;
+  }
+
+  &__brand {
+    @include display-type;
+    font-size: $font-size-xl;
+    color: $color-brand;
+  }
+
+  &__tagline {
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    margin-top: $space-2;
+  }
+
+  &__meta {
+    @include label-caps;
+    color: $color-text-muted;
+  }
+}

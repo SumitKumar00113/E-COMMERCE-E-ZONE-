@@ -1,0 +1,86 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.form {
+  &__group {
+    margin-bottom: $space-5;
+  }
+
+  &__label {
+    @include label-caps;
+    display: block;
+    margin-bottom: $space-2;
+    color: $color-text-muted;
+  }
+
+  &__input,
+  &__textarea,
+  &__select {
+    width: 100%;
+    padding: $space-3 $space-4;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    background: $color-paper;
+    font-family: $font-body;
+    font-size: $font-size-base;
+    transition: border-color $duration-fast;
+
+    &:focus {
+      border-color: $color-brand;
+      outline: none;
+    }
+
+    &--error {
+      border-color: $color-error;
+    }
+  }
+
+  &__textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  &__error {
+    color: $color-error;
+    font-size: $font-size-sm;
+    margin-top: $space-2;
+  }
+
+  &__hint {
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    margin-top: $space-2;
+  }
+
+  &__row {
+    display: grid;
+    gap: $space-4;
+
+    @include respond-to(md) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__currency-toggle {
+    display: flex;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    overflow: hidden;
+
+    button {
+      flex: 1;
+      padding: $space-3;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      @include label-caps;
+      color: $color-text-muted;
+      transition: all $duration-fast;
+
+      &--active {
+        background: $color-brand;
+        color: $color-paper;
+      }
+    }
+  }
+}

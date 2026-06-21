@@ -1,0 +1,42 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.empty-state {
+  @include rail-layout;
+  text-align: left;
+  padding: $space-10 0;
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border: 2px solid $color-border;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $space-4;
+    color: $color-brand;
+    font-size: $font-size-xl;
+  }
+
+  &__title {
+    @include display-type;
+    font-size: $font-size-2xl;
+    margin-bottom: $space-3;
+  }
+
+  &__message {
+    color: $color-text-muted;
+    margin-bottom: $space-5;
+    max-width: 40ch;
+  }
+}
+
+.error-state {
+  @extend .empty-state;
+
+  &__icon {
+    border-color: $color-error;
+    color: $color-error;
+  }
+}

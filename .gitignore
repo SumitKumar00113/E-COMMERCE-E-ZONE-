@@ -1,0 +1,67 @@
+# Node & package managers
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+**/dist/
+**/build/
+**/.parcel-cache/
+**/.next/
+**/.turbo/
+**/.vite/
+
+# Vite / frontend
+.vite/
+dist/
+
+# Production
+/*.tgz
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Runtime files
+.env
+.env.*
+
+# Test coverage
+coverage/
+coverage.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Mac
+.Spotlight-V100
+.Trashes
+
+# Temporary
+*.tmp
+*.temp
+*~
+
+# Lockfiles created by package managers (keep lockfiles if you prefer, remove if you want)
+# Uncomment to ignore if you do not want lockfiles in repo:
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Ignore node execs and coverage outputs
+npm-debug.log*
+test-results/

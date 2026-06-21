@@ -1,0 +1,27 @@
+@use "../variables" as *;
+
+.layout {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+
+  &__main {
+    flex: 1;
+    padding-top: $header-height;
+  }
+}
+
+.page {
+  &__header {
+    padding: $space-10 0 $space-6;
+  }
+
+  &__title {
+    margin-bottom: $space-3;
+  }
+
+  &__subtitle {
+    color: $color-text-muted;
+    font-size: $font-size-lg;
+  }
+}

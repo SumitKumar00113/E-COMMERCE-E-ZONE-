@@ -1,0 +1,131 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+// Signature element: scroll-masked product reveal
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+
+  &__bg-grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $space-2;
+    padding: $header-height $space-4 $space-4;
+    opacity: 0.15;
+    pointer-events: none;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  &__bg-cell {
+    aspect-ratio: 3 / 4;
+    background: $color-mist;
+    border-radius: $radius-sm;
+  }
+
+  &__mask-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: clamp($space-4, 8vw, $space-12);
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  &__mask-strip {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    width: clamp(120px, 20vw, 200px);
+    will-change: clip-path;
+
+    img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: $radius-sm;
+      box-shadow: $shadow-lift;
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    @include rail-layout;
+    padding-bottom: $space-12;
+    padding-top: calc($header-height + $space-10);
+  }
+
+  &__eyebrow {
+    @include label-caps;
+    color: $color-accent;
+    margin-bottom: $space-4;
+  }
+
+  &__headline {
+    font-size: $font-size-hero;
+    max-width: 14ch;
+    margin-bottom: $space-5;
+
+    em {
+      font-style: normal;
+      color: $color-brand;
+    }
+  }
+
+  &__subline {
+    font-size: $font-size-lg;
+    color: $color-text-muted;
+    max-width: 42ch;
+    margin-bottom: $space-8;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+    margin-bottom: $space-10;
+  }
+
+  &__scroll-cue {
+    @include label-caps;
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    color: $color-text-muted;
+    font-size: 0.65rem;
+
+    span {
+      display: block;
+      width: 1px;
+      height: 48px;
+      background: $color-border;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -2px;
+        width: 5px;
+        height: 12px;
+        background: $color-accent;
+        animation: scroll-cue-bounce 2s ease-in-out infinite;
+
+        @media (prefers-reduced-motion: reduce) {
+          animation: none;
+        }
+      }
+    }
+  }
+}

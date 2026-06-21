@@ -1,0 +1,45 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.skeleton {
+  border-radius: $radius-md;
+  @include skeleton-shimmer;
+
+  &--card {
+    aspect-ratio: 4 / 5;
+  }
+
+  &--text {
+    height: 1rem;
+    margin-bottom: $space-2;
+
+    &--short {
+      width: 60%;
+    }
+
+    &--title {
+      height: 1.5rem;
+      width: 80%;
+    }
+  }
+
+  &--gallery {
+    aspect-ratio: 4 / 3;
+    border-radius: $radius-lg;
+  }
+}
+
+.skeleton-grid {
+  @include rail-layout;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $grid-gap;
+
+  @include respond-to(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

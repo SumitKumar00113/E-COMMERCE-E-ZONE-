@@ -1,0 +1,54 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.create-product {
+  @include rail-layout;
+  padding-bottom: $space-12;
+
+  &__steps {
+    display: flex;
+    gap: $space-2;
+    margin-bottom: $space-8;
+  }
+
+  &__step {
+    flex: 1;
+    height: 3px;
+    background: $color-border;
+    border-radius: 2px;
+    transition: background $duration-base;
+
+    &--active {
+      background: $color-brand;
+    }
+
+    &--done {
+      background: $color-accent;
+    }
+  }
+
+  &__step-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $space-6;
+
+    span {
+      @include label-caps;
+      font-size: 0.6rem;
+      color: $color-text-muted;
+
+      &--active {
+        color: $color-brand;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    gap: $space-3;
+    margin-top: $space-8;
+    padding-top: $space-6;
+    border-top: 1px solid $color-border;
+  }
+}

@@ -1,0 +1,100 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.product-card {
+  position: relative;
+  display: block;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $color-frost;
+  @include card-hover-lift;
+
+  &__image-wrap {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $duration-slow $ease-out-expo;
+
+    @include reduced-motion {
+      transition: none;
+    }
+  }
+
+  &:hover &__image,
+  &:focus-within &__image {
+    transform: scale(1.04);
+
+    @include reduced-motion {
+      transform: none;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba($color-ink, 0.75) 0%,
+      transparent 55%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: $space-4;
+    opacity: 0;
+    transition: opacity $duration-base $ease-out-expo;
+
+    @include reduced-motion {
+      opacity: 1;
+      transition: none;
+    }
+  }
+
+  &:hover &__overlay,
+  &:focus-within &__overlay {
+    opacity: 1;
+  }
+
+  &__title {
+    @include display-type;
+    font-size: $font-size-lg;
+    color: $color-paper;
+    margin-bottom: $space-1;
+  }
+
+  &__price {
+    color: $color-paper;
+    font-size: $font-size-base;
+    opacity: 0.9;
+  }
+
+  &__index {
+    @include label-caps;
+    position: absolute;
+    top: $space-3;
+    left: $space-3;
+    color: $color-paper;
+    background: rgba($color-ink, 0.5);
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    font-size: 0.65rem;
+  }
+
+  &--offset-1 {
+    @include respond-to(md) {
+      margin-top: $space-8;
+    }
+  }
+
+  &--offset-2 {
+    @include respond-to(md) {
+      margin-top: $space-4;
+    }
+  }
+}

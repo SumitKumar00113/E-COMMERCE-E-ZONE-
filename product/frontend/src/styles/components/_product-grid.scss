@@ -1,0 +1,81 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.product-grid {
+  @include rail-layout;
+  padding-bottom: $space-10;
+
+  &__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-4;
+    margin-bottom: $space-6;
+    padding-bottom: $space-4;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+  }
+
+  &__filter-btn {
+    @include label-caps;
+    padding: $space-2 $space-3;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    background: transparent;
+    cursor: pointer;
+    transition: all $duration-fast;
+
+    &--active,
+    &:hover {
+      border-color: $color-brand;
+      color: $color-brand;
+      background: rgba($color-brand, 0.05);
+    }
+  }
+
+  &__sort {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  &__sort-label {
+    @include label-caps;
+    color: $color-text-muted;
+  }
+
+  &__sort-select {
+    padding: $space-2 $space-3;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    background: $color-paper;
+    font-family: $font-body;
+    font-size: $font-size-sm;
+  }
+
+  &__masonry {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $grid-gap;
+
+    @include respond-to(sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__count {
+    @include label-caps;
+    color: $color-text-muted;
+    margin-bottom: $space-4;
+  }
+}

@@ -1,0 +1,69 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.product-detail {
+  @include rail-layout;
+  padding-bottom: $space-12;
+
+  &__grid {
+    display: grid;
+    gap: $space-8;
+
+    @include respond-to(lg) {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: start;
+    }
+  }
+
+  &__info {
+    position: sticky;
+    top: calc($header-height + $space-6);
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    margin-bottom: $space-4;
+  }
+
+  &__price-block {
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    margin-bottom: $space-6;
+    padding-bottom: $space-6;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__price {
+    font-size: $font-size-2xl;
+    color: $color-brand;
+  }
+
+  &__currency {
+    @include label-caps;
+    color: $color-text-muted;
+  }
+
+  &__description {
+    color: $color-text-muted;
+    line-height: 1.8;
+    margin-bottom: $space-6;
+  }
+
+  &__seller {
+    @include label-caps;
+    color: $color-text-muted;
+    margin-bottom: $space-6;
+
+    strong {
+      color: $color-text;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+  }
+}

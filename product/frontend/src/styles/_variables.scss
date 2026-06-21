@@ -1,0 +1,93 @@
+// ─── Meridian Design Tokens ───────────────────────────────────────────────
+// Critique: rejected warm-cream/terracotta serif and dark+acid-green tropes.
+// Direction: industrial editorial — cool neutrals, cobalt authority, vermillion pulse.
+
+// Brand
+$color-cobalt: #1a3a6b; // primary brand — deep editorial blue
+$color-vermillion: #e03e1a; // accent — CTAs, hover reveals, scroll mask edge
+
+// Neutrals
+$color-ink: #0b0d10; // base text / dark surfaces
+$color-paper: #f4f1ec; // primary surface
+$color-slate: #5c6370; // secondary text
+$color-mist: #d8dce3; // borders, dividers
+$color-frost: #e8eaef; // subtle backgrounds
+
+// Semantic aliases
+$color-brand: $color-cobalt;
+$color-accent: $color-vermillion;
+$color-text: $color-ink;
+$color-text-muted: $color-slate;
+$color-surface: $color-paper;
+$color-border: $color-mist;
+$color-error: #c62828;
+$color-success: #2e7d32;
+
+// Typography
+$font-display: "Syne", system-ui, sans-serif;
+$font-body: "DM Sans", system-ui, sans-serif;
+
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.5rem;
+$font-size-2xl: 2rem;
+$font-size-3xl: clamp(2.5rem, 5vw, 4.5rem);
+$font-size-hero: clamp(3rem, 8vw, 7rem);
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-black: 800;
+
+$letter-tight: -0.03em;
+$letter-wide: 0.12em;
+$letter-display: -0.04em;
+
+// Layout — "Offset Rail": content anchors left rail, dramatic right negative space
+$rail-offset: clamp(1.5rem, 6vw, 8rem);
+$grid-gap: clamp(1rem, 2vw, 2rem);
+$max-width: 1440px;
+$header-height: 4.5rem;
+
+// Spacing scale
+$space-1: 0.25rem;
+$space-2: 0.5rem;
+$space-3: 0.75rem;
+$space-4: 1rem;
+$space-5: 1.5rem;
+$space-6: 2rem;
+$space-8: 3rem;
+$space-10: 4rem;
+$space-12: 6rem;
+$space-16: 8rem;
+
+// Radius
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 16px;
+
+// Shadows
+$shadow-soft: 0 4px 24px rgba($color-ink, 0.06);
+$shadow-lift: 0 12px 40px rgba($color-ink, 0.12);
+
+// Motion
+$ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+$duration-fast: 200ms;
+$duration-base: 400ms;
+$duration-slow: 700ms;
+
+// Z-index
+$z-header: 100;
+$z-overlay: 200;
+$z-toast: 300;
+$z-cursor: 400;
+
+// Breakpoints
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;

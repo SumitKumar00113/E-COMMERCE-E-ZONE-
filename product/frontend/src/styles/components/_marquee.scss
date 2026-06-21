@@ -1,0 +1,54 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.marquee {
+  padding: $space-8 0;
+  border-block: 1px solid $color-border;
+  overflow: hidden;
+  background: $color-ink;
+  color: $color-paper;
+
+  &__label {
+    @include rail-layout;
+    @include label-caps;
+    color: $color-mist;
+    margin-bottom: $space-4;
+  }
+
+  &__track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 40s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding-right: $space-8;
+    flex-shrink: 0;
+  }
+
+  &__thumb {
+    width: 64px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: $radius-sm;
+  }
+
+  &__title {
+    @include display-type;
+    font-size: $font-size-lg;
+    white-space: nowrap;
+  }
+
+  &__price {
+    @include label-caps;
+    color: $color-accent;
+    white-space: nowrap;
+  }
+}

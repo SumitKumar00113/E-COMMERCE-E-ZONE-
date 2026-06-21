@@ -1,0 +1,135 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: $z-header;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  background: rgba($color-paper, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color $duration-fast $ease-in-out;
+
+  &--scrolled {
+    border-bottom-color: $color-border;
+  }
+
+  &__inner {
+    @include rail-layout;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: $space-4;
+  }
+
+  &__logo {
+    @include display-type;
+    font-size: $font-size-lg;
+    color: $color-brand;
+    letter-spacing: $letter-tight;
+
+    span {
+      color: $color-accent;
+    }
+  }
+
+  &__nav {
+    display: none;
+    align-items: center;
+    gap: $space-6;
+
+    @include respond-to(md) {
+      display: flex;
+    }
+  }
+
+  &__link {
+    @include label-caps;
+    color: $color-text-muted;
+    position: relative;
+    padding: $space-2 0;
+    transition: color $duration-fast;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: $color-accent;
+      transition: width $duration-base $ease-out-expo;
+    }
+
+    &:hover,
+    &--active {
+      color: $color-text;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  &__menu-btn {
+    @include button-reset;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: $space-2;
+
+    @include respond-to(md) {
+      display: none;
+    }
+
+    span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: $color-ink;
+      transition: transform $duration-fast;
+    }
+
+    &--open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    &--open span:nth-child(2) {
+      opacity: 0;
+    }
+    &--open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+
+  &__mobile-nav {
+    position: fixed;
+    inset: $header-height 0 0 0;
+    background: $color-paper;
+    padding: $space-6 $rail-offset;
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+    transform: translateX(100%);
+    transition: transform $duration-base $ease-out-expo;
+
+    &--open {
+      transform: translateX(0);
+    }
+
+    @include respond-to(md) {
+      display: none;
+    }
+  }
+}

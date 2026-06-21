@@ -1,0 +1,60 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.btn {
+  @include label-caps;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-3 $space-5;
+  border-radius: $radius-sm;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background $duration-fast, color $duration-fast,
+    border-color $duration-fast, transform $duration-fast $ease-out-expo;
+
+  @include reduced-motion {
+    transition: background $duration-fast, color $duration-fast,
+      border-color $duration-fast;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: $color-brand;
+    color: $color-paper;
+
+    &:hover:not(:disabled) {
+      background: darken($color-brand, 6%);
+    }
+  }
+
+  &--accent {
+    background: $color-accent;
+    color: $color-paper;
+
+    &:hover:not(:disabled) {
+      background: darken($color-accent, 6%);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $color-text;
+    border-color: $color-border;
+
+    &:hover:not(:disabled) {
+      border-color: $color-brand;
+      color: $color-brand;
+    }
+  }
+
+  &--sm {
+    padding: $space-2 $space-3;
+    font-size: 0.65rem;
+  }
+}

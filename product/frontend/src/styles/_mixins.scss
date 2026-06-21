@@ -1,0 +1,104 @@
+@use "variables" as *;
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $bp-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: $bp-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: $bp-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: $bp-xl) {
+      @content;
+    }
+  }
+}
+
+@mixin rail-layout {
+  padding-left: $rail-offset;
+  padding-right: clamp($space-4, 4vw, $space-8);
+  max-width: $max-width;
+  margin-inline: auto;
+}
+
+@mixin focus-ring {
+  outline: 2px solid $color-cobalt;
+  outline-offset: 3px;
+}
+
+@mixin button-reset {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+@mixin skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    $color-frost 25%,
+    $color-mist 50%,
+    $color-frost 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+
+  @include reduced-motion {
+    animation: none;
+    background: $color-frost;
+  }
+}
+
+@mixin card-hover-lift {
+  transition: transform $duration-base $ease-out-expo,
+    box-shadow $duration-base $ease-out-expo;
+
+  @include reduced-motion {
+    transition: none;
+  }
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lift;
+
+    @include reduced-motion {
+      transform: none;
+    }
+  }
+}
+
+@mixin display-type {
+  font-family: $font-display;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-display;
+  line-height: 0.95;
+}
+
+@mixin label-caps {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-wide;
+  text-transform: uppercase;
+}

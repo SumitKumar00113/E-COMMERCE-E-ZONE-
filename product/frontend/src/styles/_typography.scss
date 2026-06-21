@@ -1,0 +1,63 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+body {
+  font-family: $font-body;
+  font-size: $font-size-base;
+  font-weight: $font-weight-regular;
+  color: $color-text;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.display {
+  @include display-type;
+  color: $color-text;
+}
+
+h1 {
+  font-size: $font-size-hero;
+}
+
+h2 {
+  font-size: $font-size-3xl;
+}
+
+h3 {
+  font-size: $font-size-2xl;
+}
+
+h4 {
+  font-size: $font-size-xl;
+}
+
+p {
+  max-width: 65ch;
+}
+
+.text-muted {
+  color: $color-text-muted;
+}
+
+.text-accent {
+  color: $color-accent;
+}
+
+.text-brand {
+  color: $color-brand;
+}
+
+.label-caps {
+  @include label-caps;
+}
+
+.price {
+  font-family: $font-display;
+  font-weight: $font-weight-semibold;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: $letter-tight;
+}

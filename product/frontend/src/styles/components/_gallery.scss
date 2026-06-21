@@ -1,0 +1,51 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.gallery {
+  &__main {
+    position: relative;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    background: $color-frost;
+    margin-bottom: $space-4;
+  }
+
+  &__main-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  &__thumbs {
+    display: flex;
+    gap: $space-2;
+    overflow-x: auto;
+    padding-bottom: $space-2;
+  }
+
+  &__thumb {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border: 2px solid transparent;
+    border-radius: $radius-sm;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--active {
+      border-color: $color-brand;
+    }
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+}
