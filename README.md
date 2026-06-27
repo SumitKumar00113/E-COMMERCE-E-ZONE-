@@ -8,6 +8,7 @@ Simple mono-repo with small example services for practice: `auth`, `cart`, `orde
 - `cart/` — Cart service (Backend)
 - `order/` — Order service (Backend)
 - `product/` — Product service (Backend + frontend)
+- `address` — Address Service(Backend)
 
 Each service typically has a `Backend/` folder containing a Node.js app and a `frontend/` folder for the Vite React app when present.
 
