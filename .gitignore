@@ -1,5 +1,4 @@
 # Markdown files
-*.md
 
 # Node & package managers
 **/node_modules/

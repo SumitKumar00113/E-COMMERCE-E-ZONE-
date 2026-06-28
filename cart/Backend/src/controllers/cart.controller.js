@@ -4,7 +4,8 @@ import cartModel from "../models/cart.model.js";
 const getCartItems = async (req, res) => {
   try {
     const user = req.user;
-    const cart = await cartModel.findOne({ user: user._id });
+  
+    const cart = await cartModel.findOne({ user: user.id });
     return res.status(200).json({
       message: "cart fetch successfully",
       items: cart?.items ?? [],

@@ -1,8 +1,12 @@
 import app from "./src/app.js";
-import connectToDb from "./src/db/db.js"
+import connectToDb from "./src/db/db.js";
 
+// =========================
+// Order Server Entry Point
+// =========================
+const port = process.env.PORT || 3003;
 
-connectToDb()
-app.listen(3003,()=>{
-    console.log("server is runnig on port : 3003");
-})
+connectToDb();
+app.listen(port, () => {
+  console.log(`server is running on port http://localhost:${port}`);
+});

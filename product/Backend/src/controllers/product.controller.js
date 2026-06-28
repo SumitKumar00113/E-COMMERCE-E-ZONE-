@@ -59,7 +59,7 @@ const createProduct = async (req, res) => {
 const getProducts = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
+
 
     // Validate if id is a valid MongoDB ObjectId
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {

@@ -1,12 +1,14 @@
 import jwt from "jsonwebtoken";
 import config from "../configs/auth.config.js";
 
-const createAuthMiddleware = (roles = ["user"]) => {
+// =========================
+// Auth Middleware
+// =========================
+const createAuthMiddleware = (roles = []) => {
   return async (req, res, next) => {
     try {
       const accessToken =
-        req.cookies?.accessToken ||
-        req.headers?.authorization?.split(" ")[1];
+        req.cookies?.accessToken || req.headers?.authorization?.split(" ")[1];
 
       if (!accessToken) {
         return res.status(401).json({
@@ -14,12 +16,11 @@ const createAuthMiddleware = (roles = ["user"]) => {
         });
       }
 
+      req.accessToken = accessToken;
       try {
-        const decoded = jwt.verify(
-          accessToken,
-          config.JWT_SECRET_KEY
-        );
-        if (!roles.includes(decoded.role)) {
+        const decoded = jwt.verify(accessToken, config.JWT_SECRET_KEY);
+        console.log(decoded);
+        if (roles.length > 0 && !roles.includes(decoded.role)) {
           return res.status(403).json({
             message: "Forbidden: insufficient permissions",
           });

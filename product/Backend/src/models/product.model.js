@@ -34,6 +34,10 @@ const productSchema =new mongoose.Schema({
         enum:["Electronics","Clothing","Books","Home & Kitchen","Sports & Outdoors","Beauty & Personal Care","Toys & Games","Automotive","Health & Wellness","Jewelry & Accessories"],
         default:"Electronics"
     },
+    stock:{
+type:Number,
+default:1,
+    },
     createdAt:{
         type:Date,
         default:Date.now
@@ -41,7 +45,8 @@ const productSchema =new mongoose.Schema({
     seller:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-    }
+    },
+
 })
 productSchema.index({ title: "text", description: "text", category: "text" }, { weights: { title: 10, description: 1, category: 5 } });
 const productModel =mongoose.model("product",productSchema);

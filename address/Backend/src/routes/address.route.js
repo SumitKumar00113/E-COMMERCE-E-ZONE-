@@ -17,4 +17,11 @@ router.get(
   createAuthMiddleware(["seller", "user"]),
   addressController.getAddress
 );
+router.patch(
+  "/update-address/:addressId",
+  createAuthMiddleware(["user"]),
+  addressController.updateAddress
+);
+router.delete("/address/:addressId",createAuthMiddleware(["user","seller"]),addressController.deleteAddress)
+
 export default router;

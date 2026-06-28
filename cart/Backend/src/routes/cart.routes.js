@@ -5,15 +5,15 @@ import cartValidation from "../validators/auth.validator.js";
 
 const router = express.Router();
 
-router.get("/", createAuthMiddleware(["user"]), cartController.getCartItems);
+router.get("/",createAuthMiddleware(["seller","user"]),cartController.getCartItems);
 router.post(
   "/items",
-  createAuthMiddleware(["user"]),
+  createAuthMiddleware(["seller","user"]),
   cartValidation.itemCartValidation(),
   cartController.addItemToCart,
 );
 router.delete(
-  "/",
+  "/clear",
   createAuthMiddleware(["user"]),
   cartController.deleteAllCart,
 );

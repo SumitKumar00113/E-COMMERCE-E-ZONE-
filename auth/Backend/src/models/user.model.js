@@ -1,23 +1,6 @@
 import mongoose from "mongoose";
 import { isDeepStrictEqual } from "node:util";
 
-const addressSchema=new mongoose.Schema({
-    addresses:{
-          houseNumber: String,
-  street: String,
-  area: String,
-  city: String,
-  state: String,
-  country: String,
-  pincode: String,
-  mobileNo: String,
-  isDefault:{
-    type:Boolean,
-    default:false,
-  }
-
-    }
-})
 
 const userSchema= new mongoose.Schema({
     fullName:{
@@ -52,10 +35,7 @@ lastName:{
     password:{
         type:String,
         select:false,
-    },
-    address:[
-        addressSchema,
-    ],
+    }, 
     role:{
         type:String,
         enum:["user","seller"],

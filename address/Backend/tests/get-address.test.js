@@ -1,4 +1,5 @@
 import { jest, describe, beforeEach, test, expect } from "@jest/globals";
+import express from "express";
 import request from "supertest";
 
 // Mock the model before importing it
@@ -11,7 +12,18 @@ jest.unstable_mockModule("../src/models/address.model.js", () => ({
 // Import mocked modules
 const { default: addressModel } =
   await import("../src/models/address.model.js");
-const { default: app } = await import("../src/app.js");
+const addressRouter = (await import("../src/routes/address.route.js")).default;
+
+const buildApp = () => {
+  const app = express();
+  app.use(express.json());
+  app.use((req, _res, next) => {
+    req.user = { id: "user123" };
+    next();
+  });
+  app.use("/api/get", addressRouter);
+  return app;
+};
 
 describe("GET /api/get/address", () => {
   beforeEach(() => {
@@ -48,7 +60,7 @@ describe("GET /api/get/address", () => {
 
     addressModel.find.mockResolvedValue(addresses);
 
-    const response = await request(app).get("/api/get/address");
+    const response = await request(buildApp()).get("/api/get/address");
 
     expect(addressModel.find).toHaveBeenCalledTimes(1);
     expect(response.statusCode).toBe(200);

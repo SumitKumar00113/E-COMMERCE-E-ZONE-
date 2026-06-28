@@ -6,7 +6,7 @@ import createAuthMiddleware from "../middlewares/auth.middleware.js";
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 router.post(
-  "/product",
+  "/create-product",
   upload.array("images", 5),
   createAuthMiddleware(["admin", "seller"]),
   validateMiddleware.validateProduct,
@@ -31,7 +31,6 @@ router.delete(
 );
 router.get(
   "/product/:id",
-  createAuthMiddleware(["admin", "seller"]),
   productController.getProducts,
 );
 export default router;
