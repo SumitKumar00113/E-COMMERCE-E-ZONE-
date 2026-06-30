@@ -7,7 +7,7 @@ import cors from "cors";
 // Order App Setup
 // =========================
 const authMiddlewareModule =
-  await import("../src/middlewares/auth.middleware.js");
+  await import("./middlewares/order.middleware.js");
 const createAuthMiddleware =
   authMiddlewareModule.default ?? authMiddlewareModule;
 
@@ -16,5 +16,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use("/api", createAuthMiddleware(), orderRouter);
+
 
 export default app;

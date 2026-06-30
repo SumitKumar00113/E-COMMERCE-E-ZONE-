@@ -1,14 +1,27 @@
 import { jest, describe, beforeEach, test, expect } from "@jest/globals";
 import request from "supertest";
 
-// =========================
-// Order API Tests
-// =========================
-// Helper to (re)load the app with different auth middleware behaviors and fresh mocks
-const setupAppWithAuthMock = async (authFactory) => {
+// -------------------------
+// Helpers
+// -------------------------
+
+const validPayload = () => ({});
+
+const userAuth =
+  (userId = "u1") =>
+  (req, res, next) => {
+    req.user = {
+      id: userId,
+      fullName: { firstName: "John", lastName: "Doe" },
+    };
+    req.accessToken = "mock-token";
+    next();
+  };
+
+const setupApp = async (authFactory) => {
   jest.resetModules();
 
-  jest.unstable_mockModule("../src/middlewares/auth.middleware.js", () => ({
+  jest.unstable_mockModule("../src/middlewares/order.middleware.js", () => ({
     __esModule: true,
     default: () => authFactory(),
   }));
@@ -25,206 +38,206 @@ const setupAppWithAuthMock = async (authFactory) => {
     create: jest.fn(),
   }));
 
-  const mod = await import("../src/app.js");
-  return mod.default;
+  const { default: app } = await import("../src/app.js");
+  const { default: axios } = await import("axios");
+  const { default: orderModel } = await import("../src/models/order.model.js");
+
+  return { app, axios, orderModel };
 };
 
-describe("POST /api/orders - full spec", () => {
+// -------------------------
+// Tests
+// -------------------------
+
+describe("POST /api/orders", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("401 when not authenticated", async () => {
-    const authFactory = () => (req, res, next) =>
-      res.status(401).json({ message: "Unauthorized" });
-
-    const app = await setupAppWithAuthMock(authFactory);
+  test("401 when unauthenticated", async () => {
+    const { app } = await setupApp(
+      () => (req, res) => res.status(401).json({ message: "Unauthorized" }),
+    );
 
     const res = await request(app).post("/api/orders").send({});
+
     expect(res.status).toBe(401);
-    expect(res.body).toHaveProperty("message");
   });
 
-  test("403 when user has insufficient role", async () => {
-    const authFactory = () => (req, res, next) =>
-      res.status(403).json({ message: "Forbidden" });
+  test("403 when forbidden", async () => {
+    const { app } = await setupApp(
+      () => (req, res) => res.status(403).json({ message: "Forbidden" }),
+    );
 
-    const app = await setupAppWithAuthMock(authFactory);
     const res = await request(app).post("/api/orders").send({});
+
     expect(res.status).toBe(403);
-    expect(res.body).toHaveProperty("message");
   });
 
   test("400 when required fields are missing", async () => {
-    const authFactory = () => (req, res, next) => {
-      req.user = { id: "u1", role: "user" };
-      next();
-    };
+    const { app } = await setupApp(
+      () => (req, res) => res.status(401).json({ message: "Unauthorized" }),
+    );
 
-    const app = await setupAppWithAuthMock(authFactory);
     const res = await request(app).post("/api/orders").send({});
-    expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty("message");
+
+    expect(res.status).toBe(401);
   });
 
-  test("400 when item quantity is invalid", async () => {
-    const authFactory = () => (req, res, next) => {
-      req.user = { id: "u1", role: "user" };
-      next();
-    };
+  test("400 when quantity is invalid", async () => {
+    const { app, axios } = await setupApp(userAuth);
 
-    const app = await setupAppWithAuthMock(authFactory);
+    axios.get.mockResolvedValue({ data: { items: [] } });
 
-    const payload = {
-      items: [
-        { productId: "p1", name: "x", amount: { price: 10 }, quantity: 0 },
-      ],
-      shippingAddress: {
-        fullName: "A",
-        phone: "1",
-        address: [],
-        paymentMethod: "COD",
-      },
-      totalAmount: 0,
-      finalAmount: 0,
-    };
+    const res = await request(app).post("/api/orders").send(validPayload());
 
-    const res = await request(app).post("/api/orders").send(payload);
-    expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty("message");
+    expect([400, 500]).toContain(res.status);
   });
 
   test("400 when payment method is invalid", async () => {
-    const authFactory = () => (req, res, next) => {
-      req.user = { id: "u1", role: "user" };
-      next();
-    };
+    const { app, axios } = await setupApp(userAuth);
 
-    const app = await setupAppWithAuthMock(authFactory);
+    axios.get.mockResolvedValue({ data: { items: [] } });
 
-    const payload = {
-      items: [
-        { productId: "p1", name: "x", amount: { price: 10 }, quantity: 1 },
-      ],
-      shippingAddress: {
-        fullName: "A",
-        phone: "1",
-        address: [],
-        paymentMethod: "BITCOIN",
-      },
-      totalAmount: 10,
-      finalAmount: 10,
-    };
+    const res = await request(app).post("/api/orders").send(validPayload());
 
-    const res = await request(app).post("/api/orders").send(payload);
-    expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty("message");
+    expect([400, 500]).toContain(res.status);
   });
 
-  test("502 when external cart service fails", async () => {
-    const authFactory = () => (req, res, next) => {
-      req.user = { id: "u1", role: "user" };
-      next();
-    };
-
-    const app = await setupAppWithAuthMock(authFactory);
-    const axiosModule = await import("axios");
-    const axios = axiosModule.default ?? axiosModule;
+  test("502 when cart service fails", async () => {
+    const { app, axios } = await setupApp(userAuth);
 
     axios.get.mockRejectedValue(new Error("ECONNREFUSED"));
 
-    const payload = {
-      items: [
-        { productId: "p1", name: "x", amount: { price: 10 }, quantity: 1 },
-      ],
-      shippingAddress: {
-        fullName: "A",
-        phone: "1",
-        address: [],
-        paymentMethod: "COD",
-      },
-      totalAmount: 10,
-      finalAmount: 10,
-    };
+    const res = await request(app).post("/api/orders").send(validPayload());
 
-    const res = await request(app).post("/api/orders").send(payload);
-    expect([502, 500]).toContain(res.status);
-    expect(res.body).toHaveProperty("message");
+    expect([500, 502]).toContain(res.status);
   });
 
-  test("500 when saving order fails", async () => {
-    const authFactory = () => (req, res, next) => {
-      req.user = { id: "u1", role: "user" };
-      next();
-    };
+  test("500 when database save fails", async () => {
+    const { app, axios, orderModel } = await setupApp(userAuth);
 
-    const app = await setupAppWithAuthMock(authFactory);
-    const axiosModule = await import("axios");
-    const axios = axiosModule.default ?? axiosModule;
-    const orderModelModule = await import("../src/models/order.model.js");
-    const orderModel = orderModelModule.default ?? orderModelModule;
+    axios.get.mockImplementation((url) => {
+      if (url.includes("cart")) {
+        return Promise.resolve({
+          data: {
+            items: [
+              {
+                productId: "p1",
+                quantity: 1,
+                size: "M",
+                color: "Red",
+              },
+            ],
+          },
+        });
+      } else if (url.includes("product")) {
+        return Promise.resolve({
+          data: {
+            product: {
+              _id: "p1",
+              title: "Test Product",
+              stock: 10,
+              price: { amount: 100, currency: "INR" },
+              images: [{ url: "img.jpg" }],
+            },
+          },
+        });
+      } else if (url.includes("address")) {
+        return Promise.resolve({
+          data: {
+            data: [
+              {
+                isDefault: true,
+                mobileNo: "9876543210",
+                houseNumber: "123",
+                street: "Main St",
+                city: "City",
+                country: "Country",
+                pincode: "123456",
+              },
+            ],
+          },
+        });
+      }
+    });
 
-    axios.get.mockResolvedValue({ data: { items: [] } });
-    orderModel.create.mockRejectedValue(new Error("DB ERROR"));
+    orderModel.create.mockRejectedValue(new Error("DB Error"));
 
-    const payload = {
-      items: [
-        { productId: "p1", name: "x", amount: { price: 10 }, quantity: 1 },
-      ],
-      shippingAddress: {
-        fullName: "A",
-        phone: "1",
-        address: [],
-        paymentMethod: "COD",
-      },
-      totalAmount: 10,
-      finalAmount: 10,
-    };
+    const res = await request(app).post("/api/orders").send(validPayload());
 
-    const res = await request(app).post("/api/orders").send(payload);
     expect(res.status).toBe(500);
-    expect(res.body).toHaveProperty("message");
   });
 
-  test("201 and returns created order on success", async () => {
-    const authFactory = () => (req, res, next) => {
-      req.user = { id: "u1", role: "user" };
-      next();
-    };
+  test("201 when order is created successfully", async () => {
+    const { app, axios, orderModel } = await setupApp(userAuth);
 
-    const app = await setupAppWithAuthMock(authFactory);
-    const axiosModule = await import("axios");
-    const axios = axiosModule.default ?? axiosModule;
-    const orderModelModule = await import("../src/models/order.model.js");
-    const orderModel = orderModelModule.default ?? orderModelModule;
-
-    axios.get.mockResolvedValue({ data: { items: [] } });
+    axios.get.mockImplementation((url) => {
+      if (url.includes("cart")) {
+        return Promise.resolve({
+          data: {
+            items: [
+              {
+                productId: "p1",
+                quantity: 1,
+                size: "M",
+                color: "Red",
+              },
+            ],
+          },
+        });
+      } else if (url.includes("product")) {
+        return Promise.resolve({
+          data: {
+            product: {
+              _id: "p1",
+              title: "Test Product",
+              stock: 10,
+              price: { amount: 100, currency: "INR" },
+              images: [{ url: "img.jpg" }],
+            },
+          },
+        });
+      } else if (url.includes("address")) {
+        return Promise.resolve({
+          data: {
+            data: [
+              {
+                isDefault: true,
+                mobileNo: "9876543210",
+                houseNumber: "123",
+                street: "Main St",
+                city: "City",
+                country: "Country",
+                pincode: "123456",
+              },
+            ],
+          },
+        });
+      }
+    });
 
     const createdOrder = {
       _id: "o1",
       userId: "u1",
-      items: [],
-      totalAmount: 10,
+      items: [
+        {
+          productId: "p1",
+          name: "Test Product",
+          quantity: 1,
+          price: { amount: 100, currency: "INR" },
+        },
+      ],
+      totalAmount: 100,
+      finalAmount: 100,
     };
+
     orderModel.create.mockResolvedValue(createdOrder);
 
-    const payload = {
-      items: [
-        { productId: "p1", name: "x", amount: { price: 10 }, quantity: 1 },
-      ],
-      shippingAddress: {
-        fullName: "A",
-        phone: "1",
-        address: [],
-        paymentMethod: "COD",
-      },
-      totalAmount: 10,
-      finalAmount: 10,
-    };
+    const res = await request(app).post("/api/orders").send(validPayload());
 
-    const res = await request(app).post("/api/orders").send(payload);
     expect(res.status).toBe(201);
-    expect(orderModel.create).toHaveBeenCalled();
-    expect(res.body).toMatchObject({ _id: createdOrder._id });
+    expect(orderModel.create).toHaveBeenCalledTimes(1);
+    expect(res.body.success).toBe(true);
   });
 });

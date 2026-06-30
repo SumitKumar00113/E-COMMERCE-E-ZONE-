@@ -1,0 +1,764 @@
+@use "../styles/variables" as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: var(--font-body), $font-body;
+  color: $ink;
+  background: $page-bg;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+// ─── App shell ───────────────────────────────────────────────────────────────
+
+.flonea-app {
+  min-height: 100vh;
+}
+
+.flonea-main {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: calc($header-height + 1rem) clamp(1rem, 3vw, 2rem) 3rem;
+
+  @media (min-width: $bp-lg) {
+    grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr);
+    align-items: start;
+  }
+}
+
+.flonea-main__left {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+// ─── Header ──────────────────────────────────────────────────────────────────
+
+.flonea-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: $header-height;
+  background: rgba($white, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba($ink, 0.06);
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: $max-width;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 3vw, 2rem);
+  }
+
+  &__logo {
+    font-family: var(--font-display), $font-display;
+    font-size: 1.75rem;
+    letter-spacing: 0.02em;
+    color: $ink;
+
+    span {
+      color: $orange;
+    }
+  }
+
+  &__nav {
+    display: none;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 2rem);
+
+    @media (min-width: $bp-md) {
+      display: flex;
+    }
+
+    a {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: $muted;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $ink;
+      }
+    }
+  }
+
+  &__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.55rem 0.55rem 1.25rem;
+    border-radius: $radius-pill;
+    background: $navy;
+    color: $white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  &__contact-icon {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: $orange;
+    font-size: 0.85rem;
+  }
+}
+
+// ─── Hero ────────────────────────────────────────────────────────────────────
+
+.flonea-hero {
+  display: grid;
+  gap: 1rem;
+  min-height: 520px;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: 140px minmax(0, 1fr);
+  }
+
+  &__aside {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+
+    @media (min-width: $bp-md) {
+      display: flex;
+    }
+  }
+
+  &__badge-circle {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+    padding: 1rem;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    background: $white;
+    box-shadow: 0 8px 30px rgba($ink, 0.08);
+    text-align: center;
+
+    p {
+      margin: 0;
+      font-size: 0.62rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+  }
+
+  &__badge-icon {
+    font-size: 1.5rem;
+  }
+
+  &__mini-card {
+    padding: 0.75rem;
+    border-radius: $radius-card;
+    background: $white;
+    box-shadow: 0 8px 30px rgba($ink, 0.08);
+
+    img,
+    .flonea-img {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    p {
+      margin: 0.5rem 0 0;
+      font-size: 0.65rem;
+      font-weight: 700;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+  }
+
+  &__main {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: $radius-card;
+    background: linear-gradient(145deg, $navy 0%, $navy-deep 100%);
+    color: $white;
+  }
+
+  &__pill {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: $radius-pill;
+    background: rgba($white, 0.12);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    max-width: 520px;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-display), $font-display;
+    font-size: clamp(2.5rem, 6vw, 4.25rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  &__inset {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 3px solid rgba($white, 0.25);
+  }
+
+  &__copy {
+    max-width: 38ch;
+    margin: 1.25rem 0 1.5rem;
+    color: rgba($white, 0.78);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 2px solid $orange;
+    padding-bottom: 0.25rem;
+  }
+
+  &__athlete {
+    position: absolute;
+    right: -1rem;
+    bottom: 0;
+    width: min(55%, 340px);
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;
+
+    @media (max-width: $bp-md) {
+      opacity: 0.35;
+      width: 70%;
+    }
+  }
+}
+
+// ─── Activewear ──────────────────────────────────────────────────────────────
+
+.flonea-activewear {
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    h2 {
+      flex: 1 1 220px;
+      margin: 0;
+      font-family: var(--font-display), $font-display;
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+  }
+
+  &__avatars {
+    display: flex;
+
+    span {
+      width: 36px;
+      height: 36px;
+      margin-left: -10px;
+      border: 2px solid $white;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $sky, $orange);
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &__link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $navy;
+  }
+
+  &__grid {
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: $bp-md) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}
+
+.flonea-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: $radius-card;
+  min-height: 220px;
+
+  header {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  img,
+  .flonea-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  footer {
+    margin-top: auto;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &--lime {
+    background: $lime;
+    color: $ink;
+  }
+
+  &--orange {
+    background: $orange;
+    color: $white;
+  }
+
+  &--sky {
+    background: $sky;
+    color: $ink;
+  }
+}
+
+// ─── Tools ───────────────────────────────────────────────────────────────────
+
+.flonea-tools {
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: minmax(0, 1.4fr) minmax(180px, 0.8fr);
+  }
+
+  &__content {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 2rem);
+    border-radius: $radius-card;
+    background: $white;
+    min-height: 280px;
+  }
+
+  &__content h2 {
+    max-width: 14ch;
+    margin: 0 0 1.25rem;
+    font-family: var(--font-display), $font-display;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 400;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: $radius-pill;
+    background: $navy;
+    color: $white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__athlete {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: min(50%, 260px);
+    height: auto;
+    object-fit: contain;
+  }
+
+  &__extras {
+    display: grid;
+    gap: 1rem;
+  }
+
+  &__ball {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: center;
+    padding: 1.25rem;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    background: $white;
+    box-shadow: 0 8px 24px rgba($ink, 0.08);
+    text-align: center;
+
+    span {
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+
+  &__trophy-card {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: $radius-card;
+    background: $yellow;
+    color: $ink;
+
+    h3 {
+      margin: 0;
+      font-family: var(--font-display), $font-display;
+      font-size: 1.35rem;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    a {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+
+  &__trophy {
+    font-size: 2rem;
+  }
+}
+
+// ─── Sidebar ─────────────────────────────────────────────────────────────────
+
+.flonea-sidebar {
+  display: grid;
+  gap: 1rem;
+
+  &__feature {
+    position: relative;
+    overflow: hidden;
+    padding: 1.25rem;
+    border-radius: $radius-card;
+
+    h2 {
+      margin: 0 0 1rem;
+      font-family: var(--font-display), $font-display;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 400;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    &--blue {
+      background: linear-gradient(160deg, #d4ecff 0%, $sky 100%);
+      color: $ink;
+      min-height: 260px;
+
+      img,
+      .flonea-img {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 55%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 20px 0 0 0;
+      }
+    }
+
+    &--gear {
+      background: $white;
+    }
+  }
+
+  &__feature-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 55%;
+  }
+
+  &__toffee {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+    display: grid;
+    gap: 0.25rem;
+    justify-items: center;
+    padding: 0.75rem;
+    border-radius: 16px;
+    background: rgba($white, 0.85);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &__products h2 {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-display), $font-display;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  &__product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  &__gear-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+
+    img,
+    .flonea-img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+  }
+
+  &__season {
+    padding: 1.25rem;
+    border-radius: $radius-card;
+    background: $white;
+
+    h2 {
+      margin: 0 0 1rem;
+      font-family: var(--font-display), $font-display;
+      font-size: 1.35rem;
+      text-transform: uppercase;
+    }
+  }
+
+  &__season-hero {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 0.75rem;
+  }
+
+  &__season-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+
+    article {
+      padding: 0.5rem;
+      border-radius: 12px;
+      background: $page-bg;
+
+      img,
+      .flonea-img {
+        width: 100%;
+        height: 72px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      p {
+        margin: 0.35rem 0 0;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.flonea-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.1rem;
+  border-radius: $radius-pill;
+  background: $navy;
+  color: $white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  &--dark {
+    background: $ink;
+  }
+}
+
+.flonea-product {
+  padding: 0.65rem;
+  border-radius: 16px;
+  background: $white;
+
+  &__tag {
+    display: inline-block;
+    margin-bottom: 0.35rem;
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $orange;
+  }
+
+  img,
+  .flonea-img {
+    width: 100%;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  h3 {
+    margin: 0.35rem 0 0.15rem;
+    font-size: 0.62rem;
+    font-weight: 800;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+}
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+
+.flonea-footer {
+  margin-top: 2rem;
+  padding: 2rem clamp(1rem, 3vw, 2rem);
+  background: $navy;
+  color: $white;
+
+  &__inner {
+    display: grid;
+    gap: 1.25rem;
+    max-width: $max-width;
+    margin: 0 auto;
+
+    @media (min-width: $bp-md) {
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+    }
+  }
+
+  &__brand {
+    margin: 0;
+    font-family: var(--font-display), $font-display;
+    font-size: 1.75rem;
+    letter-spacing: 0.04em;
+  }
+
+  &__tagline {
+    margin: 0.35rem 0 0;
+    color: rgba($white, 0.72);
+    font-size: 0.9rem;
+  }
+
+  nav {
+    display: flex;
+    gap: 1.25rem;
+
+    a {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba($white, 0.75);
+
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+
+  &__copy {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba($white, 0.55);
+  }
+}
